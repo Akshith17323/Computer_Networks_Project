@@ -1,0 +1,12 @@
+{
+    "name": "backend-b",
+    "version": "1.0.0",
+    "main": "serverB.js",
+    "scripts": {
+        "start": "node serverB.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.18.2"
+    }
+}
