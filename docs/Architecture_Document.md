@@ -12,30 +12,24 @@
 ## Network Topology Diagram
 ```mermaid
 flowchart LR
-    %% Styles
-    classDef client fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef dns fill:#bbf,stroke:#333,stroke-width:2px;
-    classDef proxy fill:#fbf,stroke:#333,stroke-width:2px;
-    classDef backend fill:#bfb,stroke:#333,stroke-width:2px;
-
     subgraph LAN [Team Nucleus Private LAN]
         direction LR
         
         subgraph Mac1 [Mac 1 - Friend]
-            Client(Test Client curl):::client
-            DNS(Private DNS Server dnsmasq):::dns
+            Client(Test Client curl)
+            DNS(Private DNS Server dnsmasq)
         end
 
         subgraph Mac2 [Mac 2 - Akshith]
-            Edge(Edge Load Balancer Nginx 10.16.13.1):::proxy
+            Edge(Edge Load Balancer Nginx 10.16.13.1)
         end
 
         subgraph Mac3 [Mac 3 - Mohit]
-            BackendA(Backend Server A 10.16.13.37):::backend
+            BackendA(Backend Server A 10.16.13.37)
         end
 
         subgraph Mac4 [Mac 4 - Jayadeep]
-            BackendB(Backend Server B 10.16.13.71):::backend
+            BackendB(Backend Server B 10.16.13.71)
         end
 
         %% Connections
