@@ -2,6 +2,15 @@
 
 This repository contains the configuration and source code for the Computer Networks Course Project.
 
+## Network IP & Service Inventory
+
+| Machine ID | Team Member | User / Hostname | LAN IP | Role | Services & Ports |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Mac 1** | Akhil | `akhilnathreddy.k` | `10.16.13.239` | DNS Server / Client | `dnsmasq` (Port 53) |
+| **Mac 2** | Akshith | `akshith` | `10.16.13.1` | Edge Proxy / Balancer | `nginx` (Ports 443, 8443) |
+| **Mac 3** | Mohit | `bandimohith...` | `10.16.13.37` | Backend A | Express.js (Port 3001) |
+| **Mac 4** | Jayadeep | `jayadeep` | `10.16.13.71` | Backend B | Express.js (Port 3002) |
+
 ## Deliverables Included
 
 1. **Architecture Document**: Located at [`docs/Architecture_Document.md`](docs/Architecture_Document.md). Includes topology, IP tables, and protocol flow diagrams.
