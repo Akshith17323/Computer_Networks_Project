@@ -1,2 +1,5 @@
 .DS_Store
 *node_modules
+evidence/.DS_Store
+evidence/node_modules
+node_modules
