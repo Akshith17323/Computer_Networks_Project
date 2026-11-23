@@ -1,69 +1,83 @@
-# Private Network Service Platform (Phase 1)
+# Private Network Service Platform (Phase 1 & Phase 2)
 
-This repository contains the configuration and source code for the Computer Networks Course Project.
-
-## Network IP & Service Inventory
-
-| Machine ID | Team Member | User / Hostname | LAN IP | Role | Services & Ports |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Mac 1** | Akhil | `akhilnathreddy.k` | `10.16.13.239` | DNS Server / Client | `dnsmasq` (Port 53) |
-| **Mac 2** | Akshith | `akshith` | `10.16.13.1` | Edge Proxy / Balancer | `nginx` (Ports 443, 8443) |
-| **Mac 3** | Mohit | `bandimohith...` | `10.16.13.37` | Backend A | Express.js (Port 3001) |
-| **Mac 4** | Jayadeep | `jayadeep` | `10.16.13.71` | Backend B | Express.js (Port 3002) |
-
-## Deliverables Included
-
-1. **Architecture Document**: Located at [`docs/Architecture_Document.md`](docs/Architecture_Document.md). Includes topology, IP tables, and protocol flow diagrams.
-2. **Configuration Bundle**:
-   - **DNS**: `dns/dnsmasq.conf`
-   - **Reverse Proxy**: `nginx/nginx.conf`
-   - **Certificates**: `certs/` (generated via mkcert)
-3. **Backend Source Code**: 
-   - Backend A: `backend-a/serverA.js`
-   - Backend B: `backend-b/serverB.js`
-4. **Evidence Folder**: Located in `evidence/`. Contains Wireshark pcaps and terminal screenshots for all tasks (DNS, LAN, TLS, HTTP, Failures).
+This repository contains the configuration, source code, evidence, and architectural documentation for the Computer Networks Course Project (**Team Nucleus / Team 1**).
 
 ---
 
-## Configuration Bundle Notes
+## Network IP & Service Inventory (Phase 2)
 
-### 1. TLS Certificate Setup
-We used `mkcert` to generate a local CA and self-signed certificates for our domain.
-- The certificate is stored in `certs/app.team1.test+1.pem`
-- The private key is in `certs/app.team1.test+1-key.pem`
-- **To trust the certificate on a client Mac:**
+| Machine | Team Member | Current Subnet IP | Phase 1 & 2 Network Roles | Active Services & Ports |
+| :--- | :--- | :--- | :--- | :--- |
+| **Mac 1** | Akhil | `10.7.31.13` | Primary DNS Server & Client Resolver | `dnsmasq` (Port 53, 30s TTL) |
+| **Mac 2** | Akshith | `10.7.11.175` | Active Edge Reverse Proxy & Load Balancer | `nginx` (Ports 443, 8443, 80) with HA Failover |
+| **Mac 3** | Mohit | `10.7.11.88` | Backend A + Backup DNS + Security Isolation | Express (Port 3001), `dnsmasq` (Port 53), `pf` Firewall |
+| **Mac 4** | Jayadeep | `10.7.9.64` | Backend B + Standby Edge Proxy + Isolation | Express (Port 3002), Standby `nginx` (Port 443), `pf` Firewall |
+
+---
+
+## Deliverables Included
+
+1. **Architecture Documents**:
+   - Phase 1 Architecture: [`docs/Architecture_Document.md`](docs/Architecture_Document.md)
+   - Phase 2 Hardened Architecture & Topology: [`docs/Architecture_Document_Phase2.md`](docs/Architecture_Document_Phase2.md)
+   - Phase 2 Final Report: [`docs/Phase2_Final_Report.md`](docs/Phase2_Final_Report.md)
+   - Evaluation Layer-by-Layer Troubleshooting Guide: [`docs/Troubleshooting_Guide_Layer_by_Layer.md`](docs/Troubleshooting_Guide_Layer_by_Layer.md)
+
+2. **Configuration Bundle**:
+   - **DNS**: `dns/dnsmasq.conf` (Primary), `dns/backup_dnsmasq.conf` (Backup), `dns/dnsmasq_ttl.conf` (30s TTL)
+   - **Reverse Proxy**: `nginx/nginx.conf` (Active HA), `nginx/standby_nginx.conf` (Standby Edge)
+   - **Service Isolation (Firewall)**: `firewall/pf_backend_isolation.conf`, `enable_firewall.sh`, `disable_firewall.sh`
+   - **Certificates**: `certs/` (local CA generated via mkcert)
+
+3. **Backend Source Code**: 
+   - Backend A: `backend-a/serverA.js` (Mohit - Port 3001)
+   - Backend B: `backend-b/serverB.js` (Jayadeep - Port 3002)
+
+4. **Evidence Folder (`evidence/`)**:
+   - `01-lan/` to `08-failures/`: Complete Phase 1 evidence (Ping mesh, DNS, Backends, TLS, Caching, Wireshark, Failures)
+   - `09-dns-failover/`: Extension A (macOS Dual DNS, Backup dnsmasq running, transparent failover)
+   - `10-dns-ttl/`: Extension B (30s TTL countdown, DNS cache flushing)
+   - `11-firewall-isolation/`: Extension C (PF packet filter rules, direct access blocked, edge access allowed)
+   - `12-ha-failover/`: Extension D (Nginx automatic upstream retry, zero 502 errors when Backend A crashes, auto-recovery)
+   - `13-edge-migration/`: Extension E (Standby Nginx activation, DNS cutover to Standby Edge)
+
+5. **Automation & Testing Scripts (`scripts/` & `nginx/`)**:
+   - `scripts/update_ips.sh`: 1-second automated IP re-mapper across all configurations
+   - `scripts/run_phase2_demo.sh`: Interactive CLI demo runner for faculty evaluation
+   - `nginx/test_ha_failover.sh`: Automated HA upstream failover test loop
+   - `dns/test_dns_failover_ttl.sh`: Automated DNS resolver test script
+   - `firewall/test_firewall.sh`: Automated packet filter isolation verification
+
+---
+
+## Service Launch & Evaluation Instructions
+
+### 1. Launch Backends
+* **Backend A (Mohit - 10.7.11.88)**:
   ```bash
-  sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain certs/app.team1.test+1.pem
+  cd backend-a && node serverA.js
   ```
-  *(This satisfies the requirement to avoid using the `-k` flag in curl).*
+* **Backend B (Jayadeep - 10.7.9.64)**:
+  ```bash
+  cd backend-b && node serverB.js
+  ```
 
-### 2. Backend Launch Instructions
-The backends are simple Node.js Express applications.
-**To start Backend A (Mac 3 - Mohit):**
-```bash
-cd backend-a
-npm install
-node serverA.js
-```
-*(Runs on port 3001).*
-
-**To start Backend B (Mac 4 - Jayadeep):**
-```bash
-cd backend-b
-npm install
-node serverB.js
-```
-*(Runs on port 3002).*
-
-### 3. Edge Server (Nginx) Launch Instructions
-**To start Nginx securely on Mac 2 (Akshith):**
+### 2. Launch Active Edge Nginx (Akshith - 10.7.11.175)
 ```bash
 sudo nginx -p $(pwd)/ -c nginx/nginx.conf
 ```
-*(The `-p $(pwd)/` flag ensures Nginx resolves the relative paths to our certificate directory correctly).*
 
-### 4. DNS Server Launch Instructions
-**To start dnsmasq on Mac 1 (Client/DNS):**
+### 3. Launch DNS Services
+* **Primary DNS (Akhil - 10.7.31.13)**:
+  ```bash
+  sudo dnsmasq -C dns/dnsmasq.conf -d
+  ```
+* **Backup DNS (Mohit - 10.7.11.88)**:
+  ```bash
+  sudo dnsmasq -C dns/backup_dnsmasq.conf -d
+  ```
+
+### 4. Run Interactive Live Evaluation Demo
 ```bash
-sudo dnsmasq -C dns/dnsmasq.conf -d
+./scripts/run_phase2_demo.sh
 ```
