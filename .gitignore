@@ -6,4 +6,5 @@ node_modules
 *.mp4
 *.mp3
 *.zip
-phase2_temp/
+phase2_files/
+
