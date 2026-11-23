@@ -2,8 +2,8 @@
 # File: phase2_temp/firewall/test_firewall.sh
 # Demonstrates Extension C (Service Isolation Verification)
 
-BACKEND_A="10.16.13.37:3001"
-BACKEND_B="10.16.13.71:3002"
+BACKEND_A="10.7.11.88:3001"
+BACKEND_B="10.7.9.64:3002"
 EDGE_PROXY="https://app.team1.test/api/status"
 
 echo "=== 1. Testing Direct Connection to Backend A from Client ==="

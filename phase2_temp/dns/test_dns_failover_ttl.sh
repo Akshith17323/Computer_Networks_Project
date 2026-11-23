@@ -2,8 +2,8 @@
 # File: phase2_temp/dns/test_dns_failover_ttl.sh
 # Demonstrates Extension A (Backup DNS Failover) and Extension B (TTL Caching)
 
-PRIMARY_DNS="10.16.13.239"
-BACKUP_DNS="10.16.13.37"
+PRIMARY_DNS="10.7.31.13"
+BACKUP_DNS="10.7.11.88"
 DOMAIN="app.team1.test"
 
 echo "=== 1. Testing Primary DNS Resolution ==="
