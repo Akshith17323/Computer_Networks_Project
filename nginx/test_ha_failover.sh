@@ -10,8 +10,9 @@ echo "Sending $REQUESTS requests to $TARGET..."
 echo ""
 
 for i in $(seq 1 $REQUESTS); do
-    HEADER=$(curl -sI --resolve app.team1.test:443:127.0.0.1 "$TARGET" | grep -i "X-Backend:" | tr -d '\r')
-    STATUS=$(curl -s -o /dev/null -w "%{http_code}" --resolve app.team1.test:443:127.0.0.1 "$TARGET")
+    RESP=$(curl -sI --resolve app.team1.test:443:127.0.0.1 "$TARGET")
+    STATUS=$(echo "$RESP" | head -n 1 | awk '{print $2}')
+    HEADER=$(echo "$RESP" | grep -i "X-Backend:" | tr -d '\r')
     echo "Request $i: HTTP Status = $STATUS | Response Header = $HEADER"
     sleep 0.5
 done
