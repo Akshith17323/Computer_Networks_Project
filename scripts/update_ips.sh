@@ -35,31 +35,31 @@ if [[ -f dns/dnsmasq.conf ]]; then
 fi
 
 # 3. Update Phase 2 Backup DNS & TTL configs if present
-if [[ -f phase2_temp/dns/backup_dnsmasq.conf ]]; then
-    sed -i '' -E "s/listen-address=127\.0\.0\.1,[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/listen-address=127.0.0.1,$MAC3_IP/g" phase2_temp/dns/backup_dnsmasq.conf
-    sed -i '' -E "s/address=\/app\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/app.team1.test\/$MAC2_IP/g" phase2_temp/dns/backup_dnsmasq.conf
-    sed -i '' -E "s/address=\/api\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/api.team1.test\/$MAC2_IP/g" phase2_temp/dns/backup_dnsmasq.conf
-    echo "✔ Updated phase2_temp/dns/backup_dnsmasq.conf"
+if [[ -f dns/backup_dnsmasq.conf ]]; then
+    sed -i '' -E "s/listen-address=127\.0\.0\.1,[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/listen-address=127.0.0.1,$MAC3_IP/g" dns/backup_dnsmasq.conf
+    sed -i '' -E "s/address=\/app\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/app.team1.test\/$MAC2_IP/g" dns/backup_dnsmasq.conf
+    sed -i '' -E "s/address=\/api\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/api.team1.test\/$MAC2_IP/g" dns/backup_dnsmasq.conf
+    echo "✔ Updated dns/backup_dnsmasq.conf"
 fi
 
-if [[ -f phase2_temp/dns/dnsmasq_ttl.conf ]]; then
-    sed -i '' -E "s/listen-address=127\.0\.0\.1,[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/listen-address=127.0.0.1,$MAC1_IP/g" phase2_temp/dns/dnsmasq_ttl.conf
-    sed -i '' -E "s/address=\/app\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/app.team1.test\/$MAC2_IP/g" phase2_temp/dns/dnsmasq_ttl.conf
-    sed -i '' -E "s/address=\/api\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/api.team1.test\/$MAC2_IP/g" phase2_temp/dns/dnsmasq_ttl.conf
-    echo "✔ Updated phase2_temp/dns/dnsmasq_ttl.conf"
+if [[ -f dns/dnsmasq_ttl.conf ]]; then
+    sed -i '' -E "s/listen-address=127\.0\.0\.1,[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/listen-address=127.0.0.1,$MAC1_IP/g" dns/dnsmasq_ttl.conf
+    sed -i '' -E "s/address=\/app\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/app.team1.test\/$MAC2_IP/g" dns/dnsmasq_ttl.conf
+    sed -i '' -E "s/address=\/api\.team1\.test\/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/address=\/api.team1.test\/$MAC2_IP/g" dns/dnsmasq_ttl.conf
+    echo "✔ Updated dns/dnsmasq_ttl.conf"
 fi
 
 # 4. Update PF Firewall Isolation
-if [[ -f phase2_temp/firewall/pf_backend_isolation.conf ]]; then
-    sed -i '' -E "s/edge_ip = \"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\"/edge_ip = \"$MAC2_IP\"/g" phase2_temp/firewall/pf_backend_isolation.conf
-    echo "✔ Updated phase2_temp/firewall/pf_backend_isolation.conf"
+if [[ -f firewall/pf_backend_isolation.conf ]]; then
+    sed -i '' -E "s/edge_ip = \"[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\"/edge_ip = \"$MAC2_IP\"/g" firewall/pf_backend_isolation.conf
+    echo "✔ Updated firewall/pf_backend_isolation.conf"
 fi
 
 # 5. Update Standby Nginx
-if [[ -f phase2_temp/nginx/standby_nginx.conf ]]; then
-    sed -i '' -E "s/server [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:3001/server $MAC3_IP:3001/g" phase2_temp/nginx/standby_nginx.conf
-    sed -i '' -E "s/server [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:3002/server $MAC4_IP:3002/g" phase2_temp/nginx/standby_nginx.conf
-    echo "✔ Updated phase2_temp/nginx/standby_nginx.conf"
+if [[ -f nginx/standby_nginx.conf ]]; then
+    sed -i '' -E "s/server [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:3001/server $MAC3_IP:3001/g" nginx/standby_nginx.conf
+    sed -i '' -E "s/server [0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:3002/server $MAC4_IP:3002/g" nginx/standby_nginx.conf
+    echo "✔ Updated nginx/standby_nginx.conf"
 fi
 
 echo ""

@@ -20,7 +20,7 @@ read -p "Select a demonstration step [1-6]: " choice
 
 case $choice in
     1)
-        bash "$PROJECT_ROOT/phase2_temp/dns/test_dns_failover_ttl.sh"
+        bash "$PROJECT_ROOT/dns/test_dns_failover_ttl.sh"
         ;;
     2)
         echo "Querying DNS with TTL information:"
@@ -30,7 +30,7 @@ case $choice in
         echo "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
         ;;
     3)
-        bash "$PROJECT_ROOT/phase2_temp/firewall/test_firewall.sh"
+        bash "$PROJECT_ROOT/firewall/test_firewall.sh"
         ;;
     4)
         bash "$PROJECT_ROOT/nginx/test_ha_failover.sh"
