@@ -8,3 +8,4 @@ node_modules
 *.zip
 phase2_files/
 
+phase2_temp/
